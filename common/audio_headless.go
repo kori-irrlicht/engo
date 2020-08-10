@@ -82,12 +82,12 @@ func (a *AudioSystem) New(w *ecs.World) {
 	default:
 		a.bufsize = 8192
 	}
-	if engo.Headless() {
-		otoPlayer = &stepPlayer{
-			stepStart: make(chan []byte),
-			stepDone:  make(chan struct{}, 1),
-		}
+
+	otoPlayer = &stepPlayer{
+		stepStart: make(chan []byte),
+		stepDone:  make(chan struct{}, 1),
 	}
+
 	// run oto on a separate thread so it doesn't slow down updates
 	closeCh = make(chan struct{}, 1)
 	a.pauseCh = make(chan struct{}, 1)
