@@ -1,4 +1,4 @@
-// +build !headless
+// +build headless
 
 package common
 
@@ -9,8 +9,6 @@ import (
 
 	"github.com/EngoEngine/ecs"
 	"github.com/EngoEngine/engo"
-
-	"github.com/hajimehoshi/oto"
 )
 
 const (
@@ -88,18 +86,6 @@ func (a *AudioSystem) New(w *ecs.World) {
 		otoPlayer = &stepPlayer{
 			stepStart: make(chan []byte),
 			stepDone:  make(chan struct{}, 1),
-		}
-	} else {
-		if otoPlayer == nil {
-			c, err := oto.NewContext(SampleRate, channelNum, bytesPerSample, a.bufsize)
-			if err != nil {
-				log.Printf("audio error. Unable to create new OtoContext: %v \n\r", err)
-			}
-
-			otoPlayer = c.NewPlayer()
-		} else {
-			closeCh <- struct{}{}
-			<-loopClosedCh
 		}
 	}
 	// run oto on a separate thread so it doesn't slow down updates
